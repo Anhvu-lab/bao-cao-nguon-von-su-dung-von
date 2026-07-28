@@ -3,7 +3,7 @@
 Pipeline báo cáo cân đối vốn ngân hàng **end-to-end**: từ dữ liệu giao dịch thô đến dashboard tương tác, chạy tự động hằng ngày, hỗ trợ chạy lại (backdate) và ghi log vận hành.
 
 > Dự án cá nhân · PostgreSQL · PL/pgSQL · Power BI · DAX
-
+👉 **[Xem dashboard tương tác trực tiếp](https://anhvu-lab.github.io/bao-cao-nguon-von-su-dung-von/dashboard_nguon_von.html)**
 ---
 
 ## 🎯 Bài toán
