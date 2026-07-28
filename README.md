@@ -38,6 +38,19 @@ Kết nối qua view, chế độ Import; 3 trang: Tổng quan (KPI, cơ cấu) 
 - Báo cáo tự động hóa hoàn toàn, có kiểm soát chất lượng và giám sát lỗi.
 - Dashboard cho phép theo dõi **xu hướng, cơ cấu và độ tin cậy dữ liệu** — điều báo cáo Excel một-ngày không làm được.
 
+## 🔍 Insights nổi bật (đọc ra từ dashboard)
+
+Không dừng ở việc dựng báo cáo — hệ thống bóc tách được các insight có ý nghĩa quản trị (số liệu ngày 15/12/2023):
+
+- **CASA cực thấp (< 1%)**: tiền gửi không kỳ hạn chỉ 72 tỷ / 7.583 tỷ → ngân hàng huy động vốn *đắt*, bào mòn biên lãi. Cơ hội: đẩy sản phẩm tài khoản thanh toán để hạ giá vốn.
+- **Rủi ro tập trung kỳ hạn ngắn**: hơn 60% huy động đáo hạn trong vòng 6 tháng (riêng 1-5 tháng chiếm 43%) → áp lực tái tục và rủi ro lãi suất cao.
+- **NIM giãn rộng cả năm: 6,48% → 8,22%** → khả năng sinh lời cải thiện liên tục (chỉ thấy được nhờ theo dõi nhiều ngày, báo cáo Excel một-ngày không có).
+- **LDR 87,7% — sát trần quy định (~85%)** → dư địa cho vay bị giới hạn; muốn tăng trưởng tín dụng phải tăng huy động trước.
+- **Lệch phân khúc**: huy động nghiêng cá nhân (61%), dư nợ nghiêng doanh nghiệp (66%) → ngân hàng dùng tiền gửi bán lẻ tài trợ cho vay doanh nghiệp.
+- **Phân rã margin FTP**: khối huy động đóng góp 2,80% vs khối cho vay 1,47% → biên cho vay đang mỏng, cần soát chính sách lãi suất.
+
+> *Lưu ý: dữ liệu là mẫu/mô phỏng; các insight minh họa loại phân tích hệ thống hỗ trợ.*
+
 ## 🖼️ Dashboard
 
 **Trang tổng quan** — KPI, LDR, chênh lệch lãi suất, cơ cấu kỳ hạn
