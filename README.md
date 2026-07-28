@@ -32,7 +32,17 @@ Tính toán set-based đổ vào bảng fact, có: **chạy backdate** (xóa + t
 Kết nối qua view, chế độ Import; 3 trang: Tổng quan (KPI, cơ cấu) · Cơ cấu & chi tiết (bảng 33 dòng) · Vận hành (giám sát job). DAX measures, conditional formatting, slicer tương tác.
 
 ## 📊 Kết quả
+## 🖼️ Dashboard
 
+**Trang tổng quan** — KPI, cơ cấu kỳ hạn
+![Tổng quan](powerbi/images/trang-tong-quan.png)
+
+
+**Trang cơ cấu & chi tiết** — báo cáo 33 chỉ tiêu
+![Cơ cấu](powerbi/images/trang-co-cau.png)
+
+**Trang vận hành** — giám sát job
+![Vận hành](powerbi/images/trang-van-hanh.png)
 - Số liệu **khớp 100% (33/33 chỉ tiêu)** với báo cáo Excel thủ công gốc.
 - Procedure chạy **~0,2 giây/ngày**; backfill cả năm (365 ngày) trong vài phút.
 - Báo cáo tự động hóa hoàn toàn, có kiểm soát chất lượng và giám sát lỗi.
