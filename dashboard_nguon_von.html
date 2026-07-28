@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nguồn vốn - Sử dụng vốn | Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+ --bg:#f4f5f7;--card:#ffffff;--ink:#1a1f27;--muted:#6b7280;--line:#e5e7eb;
+ --blue:#2a78d6;--blueBg:#e6f1fb;--amber:#c98500;--amberBg:#faeeda;
+ --green:#199e70;--greenBg:#e1f5ee;--red:#d03b3b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:20px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+.top h1{font-size:20px;font-weight:600}
+.top .sub{font-size:12px;color:var(--muted)}
+.ctrl{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+select{padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);font-size:13px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:14px 0 18px}
+.tab{border:none;background:none;padding:9px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+.tab.on{color:var(--ink);border-bottom-color:var(--blue);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.kpi{background:var(--card);border-radius:12px;padding:16px 18px;border:1px solid var(--line)}
+.kpi .lb{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.kpi .vl{font-size:26px;font-weight:600;margin:4px 0 2px}
+.kpi .ft{font-size:12px;color:var(--muted)}
+.kpi.blue{background:var(--blueBg)}.kpi.blue .lb,.kpi.blue .vl,.kpi.blue .ft{color:#0c447c}
+.kpi.amber{background:var(--amberBg)}.kpi.amber .lb,.kpi.amber .vl,.kpi.amber .ft{color:#633806}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.ph{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.ph h2{font-size:15px;font-weight:600}
+.seg{display:flex;gap:4px}
+.seg button{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--blueBg);border-color:var(--blue);color:#0c447c;font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin-bottom:10px}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.chartbox{position:relative;width:100%;height:300px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{color:var(--muted);font-weight:600;text-align:right;padding:7px 6px;border-bottom:1px solid var(--line)}
+th.l{text-align:left}
+td{padding:6px;border-bottom:1px solid #f1f2f4;text-align:right;font-variant-numeric:tabular-nums}
+td.l{text-align:left}
+tr.lv0{background:var(--blueBg);font-weight:600}
+tr.lv0 td{color:#0c447c}
+tr.lv1{background:#fafbfc;font-weight:600}
+.hide{display:none}
+.hint{font-size:12px;color:var(--muted);margin-top:12px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600}
+.badge.ok{background:var(--greenBg);color:#0f6e56}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <h1>Nguồn vốn - Sử dụng vốn</h1>
+      <div class="sub">Báo cáo cân đối vốn hằng ngày · dữ liệu 2023</div>
+    </div>
+    <div class="ctrl">
+      <span>Ngày số liệu</span>
+      <select id="daySel"><option>15/12/2023</option></select>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-t="0">Tổng quan</button>
+    <button class="tab" data-t="1">Cơ cấu &amp; chi tiết</button>
+    <button class="tab" data-t="2">Xu hướng</button>
+    <button class="tab" data-t="3">Vận hành</button>
+  </div>
+
+  <div id="p0">
+    <div class="kpis">
+      <div class="kpi blue"><div class="lb">Tổng huy động</div><div class="vl">7.583 <small>tỷ</small></div><div class="ft">Lãi suất BQ 3,92%</div></div>
+      <div class="kpi amber"><div class="lb">Tổng dư nợ</div><div class="vl">6.648 <small>tỷ</small></div><div class="ft">Lãi suất BQ 12,08%</div></div>
+      <div class="kpi"><div class="lb">Dư nợ / Huy động (LDR)</div><div class="vl">87,7%</div><div class="ft">thanh khoản còn dư địa</div></div>
+      <div class="kpi"><div class="lb">Chênh lệch lãi suất ròng</div><div class="vl" style="color:var(--green)">8,16%</div><div class="ft">cho vay − huy động</div></div>
+    </div>
+    <div class="panel">
+      <div class="ph">
+        <h2>Cơ cấu <span id="dTitle">huy động theo kỳ hạn</span></h2>
+        <div class="seg"><button class="on" data-s="dp">Huy động</button><button data-s="ln">Dư nợ</button></div>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="chartbox"><canvas id="donut" role="img" aria-label="Cơ cấu vốn theo kỳ hạn"></canvas></div>
+    </div>
+  </div>
+
+  <div id="p1" class="hide">
+    <div class="panel">
+      <div class="ph"><h2>Báo cáo chi tiết 33 chỉ tiêu — 15/12/2023</h2></div>
+      <table id="mtx"></table>
+    </div>
+  </div>
+
+  <div id="p2" class="hide">
+    <div class="panel">
+      <div class="ph"><h2>Huy động &amp; dư nợ theo thời gian (tỷ đồng)</h2></div>
+      <div class="legend"><span><span class="dot" style="background:var(--blue)"></span>Huy động</span><span><span class="dot" style="background:var(--amber)"></span>Dư nợ</span></div>
+      <div class="chartbox"><canvas id="trend" role="img" aria-label="Xu hướng huy động và dư nợ cả năm 2023"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><h2>Chênh lệch lãi suất ròng theo thời gian (%)</h2></div>
+      <div class="chartbox" style="height:220px"><canvas id="nim" role="img" aria-label="Xu hướng chênh lệch lãi suất ròng"></canvas></div>
+    </div>
+  </div>
+
+  <div id="p3" class="hide">
+    <div class="kpis">
+      <div class="kpi"><div class="lb">Ngày số liệu mới nhất</div><div class="vl">15/12/2023</div></div>
+      <div class="kpi"><div class="lb">Trạng thái chạy gần nhất</div><div class="vl"><span class="badge ok">● OK</span></div></div>
+      <div class="kpi"><div class="lb">Số dòng ghi mỗi ngày</div><div class="vl">33</div></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><h2>Nhật ký chạy procedure</h2></div>
+      <table>
+        <thead><tr><th class="l">start_time</th><th class="l">end_time</th><th class="l">thời gian</th><th class="l">kết quả</th></tr></thead>
+        <tbody id="logtb"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="hint">Số liệu snapshot 15/12/2023 khớp 33/33 dòng với báo cáo Excel gốc. Biểu đồ xu hướng dùng chuỗi thật 54 tuần của năm 2023.</div>
+</div>
+
+<script>
+var COVE=['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4','#008300','#4a3aa7','#e34948','#888780','#5dcaa5'];
+var rows=[
+['DP','A. Nguồn vốn',7567813,7583225,3.92,6.72,2.80,0],
+['DP01','I/ Tiền gửi: theo kỳ hạn',7567813,7583225,3.92,6.72,2.80,1],
+['DP01001','a. KKH',72013,72997,0.30,5.00,4.70,2],
+['DP01002','b. 1-3 tuần',216808,234361,0.30,5.11,4.81,2],
+['DP01003','c. 1-5 tháng',3304553,3259747,6.41,7.87,1.46,2],
+['DP01004','d. 6 tháng',1220421,1218689,6.40,7.87,1.47,2],
+['DP01005','e. 7 tháng',294426,294984,6.34,7.77,1.43,2],
+['DP01006','f. 8-11 tháng',1825967,1847422,6.54,8.07,1.53,2],
+['DP01007','g. 12 tháng',294190,303159,6.24,7.68,1.44,2],
+['DP01008','h. 13 tháng',15919,15919,5.86,7.33,1.47,2],
+['DP01009','i. 14-23 tháng',74597,75778,6.57,8.05,1.48,2],
+['DP010010','j. 24-36 tháng',248918,260170,6.35,7.83,1.48,2],
+['DP02','II/ Tiền gửi: theo loại hình',7567813,7583225,3.92,6.72,2.80,1],
+['DP02001','a. Doanh nghiệp',2991773,2965899,3.91,6.70,2.79,2],
+['DP02002','b. Cá nhân',4576040,4617326,3.92,6.73,2.81,2],
+['LN','B. Sử dụng vốn',6658385,6647995,12.08,13.55,1.47,0],
+['LN01','I/ Dư nợ: theo kỳ hạn',6658385,6647995,12.08,13.55,1.47,1],
+['LN01001','a. Nợ QH',0,0,0,0,0,2],
+['LN01002','b. CV CCSTK',1031594,1050558,12.10,13.58,1.48,2],
+['LN01003','c. CV VNĐ lãi suất USD',1247083,1256001,12.43,13.91,1.48,2],
+['LN01004','d. CV ngắn hạn',201701,201701,12.05,13.43,1.38,2],
+['LN01005','e. CV trung hạn',2479033,2439047,12.05,13.55,1.50,2],
+['LN01006','f. CV dài hạn ≤120T',977030,977030,11.79,13.30,1.51,2],
+['LN01007','g. CV dài hạn ≤180T',548472,550185,11.72,13.11,1.39,2],
+['LN01008','h. CV dài hạn >180T',173473,173473,12.53,13.82,1.29,2],
+['LN01009','i. CV ngắn hạn HSRR≥120%',0,0,0,0,0,2],
+['LN010010','j. CV trung hạn HSRR≥120%',0,0,0,0,0,2],
+['LN010011','k. CV dài ≤120T HSRR≥120%',0,0,0,0,0,2],
+['LN010012','m. CV dài ≤180T HSRR≥120%',0,0,0,0,0,2],
+['LN010013','l. CV dài >180T HSRR≥120%',0,0,0,0,0,2],
+['LN02','II/ Dư nợ: theo loại hình',6658385,6647995,12.08,13.55,1.47,1],
+['LN02002','a. Doanh nghiệp',4398922,4396948,12.07,13.52,1.45,2],
+['LN02003','b. Cá nhân',2259463,2251047,12.08,13.56,1.48,2]];
+var trend=[["01-01",55,5650,6.48],["01-08",640,5691,7.56],["01-15",1192,5771,7.43],["01-22",1663,5803,7.36],["01-29",2035,5801,7.29],["02-05",2318,5835,7.2],["02-12",2704,5840,7.26],["02-19",3005,5759,7.22],["02-26",3339,5678,7.2],["03-05",3635,5724,7.22],["03-12",3884,5691,7.25],["03-19",3999,5763,7.27],["03-26",4268,5732,7.29],["04-02",4542,5742,7.28],["04-09",4729,5796,7.24],["04-16",5053,5824,7.24],["04-23",5350,5809,7.27],["04-30",5534,5812,7.28],["05-07",5719,5818,7.31],["05-14",5903,5873,7.29],["05-21",6123,5899,7.32],["05-28",6165,5977,7.33],["06-04",6215,5969,7.33],["06-11",6206,5964,7.39],["06-18",6344,5997,7.42],["06-25",6538,6045,7.48],["07-02",6717,6092,7.51],["07-09",6941,6163,7.58],["07-16",7058,6171,7.61],["07-23",7172,6240,7.64],["07-30",7127,6237,7.67],["08-06",7090,6230,7.71],["08-13",7155,6281,7.73],["08-20",7180,6279,7.76],["08-27",7291,6294,7.79],["09-03",7497,6277,7.85],["09-10",7633,6384,7.86],["09-17",7660,6325,7.87],["09-24",7620,6350,7.88],["10-01",7583,6352,7.92],["10-08",7641,6370,7.95],["10-15",7623,6401,7.95],["10-22",7675,6401,7.97],["10-29",7758,6513,7.97],["11-05",7824,6523,7.94],["11-12",7811,6490,7.99],["11-19",7802,6491,8.05],["11-26",7685,6672,8.09],["12-03",7594,6656,8.14],["12-10",7554,6656,8.14],["12-15",7583,6648,8.16],["12-17",7574,6648,8.18],["12-24",7625,6676,8.2],["12-31",7657,6714,8.22]];
+
+function fmt(n){return n.toLocaleString('vi-VN');}
+
+var body='<thead><tr><th class="l" style="width:34%">Chỉ tiêu</th><th>BQ (tỷ)</th><th>TĐ (tỷ)</th><th>LS%</th><th>VOF/COF%</th><th>Margin%</th></tr></thead><tbody>';
+rows.forEach(function(r){
+ var cls=r[7]===0?'lv0':(r[7]===1?'lv1':'');
+ var pad=r[7]===2?20:(r[7]===1?10:6);
+ body+='<tr class="'+cls+'"><td class="l" style="padding-left:'+pad+'px">'+r[1]+'</td><td>'+fmt(r[2])+'</td><td>'+fmt(r[3])+'</td><td>'+r[4].toFixed(2)+'</td><td>'+r[5].toFixed(2)+'</td><td>'+r[6].toFixed(2)+'</td></tr>';
+});
+document.getElementById('mtx').innerHTML=body+'</tbody>';
+
+document.getElementById('logtb').innerHTML=[
+ ['15/12/2023 06:00:11','06:00:11','0,74 s'],['14/12/2023 06:00:10','06:00:10','0,71 s'],['13/12/2023 06:00:12','06:00:12','0,69 s']
+].map(function(l){return '<tr><td class="l">'+l[0]+'</td><td class="l">'+l[1]+'</td><td class="l">'+l[2]+'</td><td class="l"><span class="badge ok">● OK</span></td></tr>';}).join('');
+
+var tabs=document.querySelectorAll('.tab');
+tabs.forEach(function(b){b.onclick=function(){
+ tabs.forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+ [0,1,2,3].forEach(function(i){document.getElementById('p'+i).classList.toggle('hide',''+i!==b.dataset.t);});
+};});
+
+var DPk=['DP01001','DP01002','DP01003','DP01004','DP01005','DP01006','DP01007','DP01008','DP01009','DP010010'];
+var LNk=['LN01001','LN01002','LN01003','LN01004','LN01005','LN01006','LN01007','LN01008'];
+var chart;
+function pick(codes){return codes.map(function(c){var r=rows.find(function(x){return x[0]===c;});return{name:r[1].replace(/^[a-z]\. /,''),v:r[3]};}).filter(function(o){return o.v>0;});}
+function draw(mode){
+ var data=pick(mode==='dp'?DPk:LNk),tot=data.reduce(function(a,b){return a+b.v;},0);
+ var cols=data.map(function(_,i){return COVE[i%COVE.length];});
+ document.getElementById('dTitle').textContent=(mode==='dp'?'huy động':'dư nợ')+' theo kỳ hạn';
+ document.getElementById('legend').innerHTML=data.map(function(d,i){return '<span><span class="dot" style="background:'+cols[i]+'"></span>'+d.name+' '+Math.round(d.v/tot*100)+'%</span>';}).join('');
+ if(chart)chart.destroy();
+ chart=new Chart(document.getElementById('donut'),{type:'doughnut',
+  data:{labels:data.map(function(d){return d.name;}),datasets:[{data:data.map(function(d){return d.v;}),backgroundColor:cols,borderColor:'#fff',borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.parsed)+' tỷ ('+Math.round(c.parsed/tot*100)+'%)';}}}}}});
+}
+document.querySelectorAll('.seg button').forEach(function(s){s.onclick=function(){
+ document.querySelectorAll('.seg button').forEach(function(x){x.classList.remove('on');});s.classList.add('on');draw(s.dataset.s);
+};});
+draw('dp');
+
+new Chart(document.getElementById('trend'),{type:'line',
+ data:{labels:trend.map(function(t){return t[0];}),datasets:[
+  {label:'Huy động',data:trend.map(function(t){return t[1];}),borderColor:'#2a78d6',backgroundColor:'rgba(42,120,214,.08)',fill:true,tension:.3,pointRadius:0,borderWidth:2},
+  {label:'Dư nợ',data:trend.map(function(t){return t[2];}),borderColor:'#c98500',backgroundColor:'rgba(201,133,0,.06)',fill:true,tension:.3,pointRadius:0,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.parsed.y)+' tỷ';}}}},
+  scales:{x:{ticks:{maxTicksLimit:12,color:'#898781'},grid:{display:false}},y:{ticks:{color:'#898781',callback:function(v){return fmt(v);}},grid:{color:'#eee'}}}}});
+
+new Chart(document.getElementById('nim'),{type:'line',
+ data:{labels:trend.map(function(t){return t[0];}),datasets:[{label:'NIM spread',data:trend.map(function(t){return t[3];}),borderColor:'#199e70',backgroundColor:'rgba(25,158,112,.08)',fill:true,tension:.3,pointRadius:0,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return 'Chênh lệch: '+c.parsed.y.toFixed(2)+'%';}}}},
+  scales:{x:{ticks:{maxTicksLimit:12,color:'#898781'},grid:{display:false}},y:{ticks:{color:'#898781',callback:function(v){return v+'%';}},grid:{color:'#eee'}}}}});
+</script>
+</body>
+</html>
